@@ -1,5 +1,5 @@
 """
-ACEAC Zero-Sum Adversarial Environment - FIXED FUNDAMENTALS
+ACEAC Zero-Sum Adversarial Environment - BALANCED VERSION
 
 This is a TRUE adversarial environment where:
 - Red and Blue compete in a zero-sum game
@@ -7,10 +7,17 @@ This is a TRUE adversarial environment where:
 - Clear win conditions define success
 - Rewards are ONLY based on final outcome
 - No participation trophies
+- BALANCED: No timeout advantage for either side
 
 Author: @sarowarzahan414
 Date: 2025-11-19
 Purpose: Fix broken reward structure identified in validation
+
+CRITICAL FIX (v2):
+- Removed Blue's timeout advantage that caused 100/0 win rate
+- Timeout now determines winner based on final state position
+- State 0.45-0.55 at timeout = draw (true stalemate)
+- This removes structural bias and enables true co-evolution
 """
 
 import gymnasium as gym
@@ -24,15 +31,18 @@ class ZeroSumCyberEnv(gym.Env):
     True zero-sum adversarial cybersecurity environment
 
     Win Conditions:
-    - Red wins: State mean > 0.7 OR critical compromise achieved
-    - Blue wins: State mean < 0.3 OR time runs out with Red failing
-    - Draw: State mean between 0.3-0.7 at episode end
+    - Red wins: State mean > 0.7 (decisive compromise)
+    - Blue wins: State mean < 0.3 (decisive defense)
+    - Timeout: State >0.55 = Red wins, <0.45 = Blue wins, else draw
+    - Draw: Stalemate (state 0.45-0.55 at timeout)
 
     Reward Structure:
     - Win: +100
     - Loss: -100
     - Draw: 0
-    - Per-step: Minimal shaping bonus (max ±1) to guide learning
+    - Per-step: Minimal shaping bonus (max ±0.25) to guide learning
+
+    BALANCED: No side has timeout advantage (fixed from v1)
     """
 
     metadata = {'render_modes': [], 'name': 'ACEAC-ZeroSum-v1'}
@@ -199,10 +209,17 @@ class ZeroSumCyberEnv(gym.Env):
         if state_mean < 0.3:
             return True, "blue"
 
-        # Timeout
+        # Timeout - BALANCED FIX
         if self.step_count >= self.max_steps:
-            # If time runs out, Blue wins (defender successfully held position)
-            return True, "blue"
+            # If time runs out, winner determined by final state position
+            # State >0.5 slightly favors Red, <0.5 favors Blue
+            # But neither gets automatic win - promotes decisive play
+            if state_mean > 0.55:
+                return True, "red"  # Red gained ground, wins
+            elif state_mean < 0.45:
+                return True, "blue"  # Blue gained ground, wins
+            else:
+                return True, "draw"  # True stalemate = draw
 
         # Game continues
         return False, "ongoing"
