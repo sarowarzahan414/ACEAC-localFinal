@@ -7,7 +7,7 @@ This is a TRUE adversarial environment where:
 - Clear win conditions define success
 - Rewards are ONLY based on final outcome
 - No participation trophies
-- BALANCED: No timeout advantage for either side
+- BALANCED: Timeout = draw (no free wins)
 
 Author: @sarowarzahan414
 Date: 2025-11-19
@@ -15,8 +15,9 @@ Purpose: Fix broken reward structure identified in validation
 
 CRITICAL FIX (v2):
 - Removed Blue's timeout advantage that caused 100/0 win rate
-- Timeout now determines winner based on final state position
-- State 0.45-0.55 at timeout = draw (true stalemate)
+- Timeout without decisive victory (state 0.3-0.7) = DRAW
+- Only decisive victories (state <0.3 or >0.7) count as wins
+- No arbitrary thresholds, no free wins for contested states
 - This removes structural bias and enables true co-evolution
 """
 
@@ -33,8 +34,7 @@ class ZeroSumCyberEnv(gym.Env):
     Win Conditions:
     - Red wins: State mean > 0.7 (decisive compromise)
     - Blue wins: State mean < 0.3 (decisive defense)
-    - Timeout: State >0.55 = Red wins, <0.45 = Blue wins, else draw
-    - Draw: Stalemate (state 0.45-0.55 at timeout)
+    - Draw: Timeout without decisive victory (state in range 0.3-0.7)
 
     Reward Structure:
     - Win: +100
@@ -42,7 +42,7 @@ class ZeroSumCyberEnv(gym.Env):
     - Draw: 0
     - Per-step: Minimal shaping bonus (max ±0.25) to guide learning
 
-    BALANCED: No side has timeout advantage (fixed from v1)
+    BALANCED: Timeout = draw (no free wins for either side)
     """
 
     metadata = {'render_modes': [], 'name': 'ACEAC-ZeroSum-v1'}
@@ -201,25 +201,20 @@ class ZeroSumCyberEnv(gym.Env):
         """
         state_mean = np.mean(self.state)
 
-        # Red victory: Network compromised
+        # Red victory: Network decisively compromised
         if state_mean > 0.7:
             return True, "red"
 
-        # Blue victory: Network secured
+        # Blue victory: Network decisively secured
         if state_mean < 0.3:
             return True, "blue"
 
-        # Timeout - BALANCED FIX
+        # Timeout - CORRECT FIX
         if self.step_count >= self.max_steps:
-            # If time runs out, winner determined by final state position
-            # State >0.5 slightly favors Red, <0.5 favors Blue
-            # But neither gets automatic win - promotes decisive play
-            if state_mean > 0.55:
-                return True, "red"  # Red gained ground, wins
-            elif state_mean < 0.45:
-                return True, "blue"  # Blue gained ground, wins
-            else:
-                return True, "draw"  # True stalemate = draw
+            # If neither side achieved decisive victory (0.3 or 0.7), it's a draw
+            # State in range [0.3, 0.7] = contested/inconclusive = DRAW
+            # No arbitrary thresholds, no free wins
+            return True, "draw"
 
         # Game continues
         return False, "ongoing"
