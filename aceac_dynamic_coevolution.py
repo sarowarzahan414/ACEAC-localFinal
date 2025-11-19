@@ -78,14 +78,23 @@ class DynamicCoEvolutionEnv(gym.Env):
         self.action_effects = np.zeros((num_actions,))
         self.interaction_matrix = np.zeros((num_actions, num_actions))
 
+        # Environment-specific RNG for deterministic behavior
+        self.np_random = None
+
         self.reset()
 
     def reset(self, seed: Optional[int] = None, options: Optional[Dict] = None):
         """Reset environment to initial state"""
         super().reset(seed=seed)
 
+        # Initialize environment-specific RNG for deterministic behavior
+        if seed is not None:
+            self.np_random = np.random.RandomState(seed)
+        elif self.np_random is None:
+            self.np_random = np.random.RandomState()
+
         # Initialize state - random initialization, no preset values
-        self.state = np.random.uniform(0.3, 0.7, size=self.state_dim)
+        self.state = self.np_random.uniform(0.3, 0.7, size=self.state_dim)
         self.state = self.state.astype(np.float32)
 
         self.step_count = 0
@@ -186,15 +195,12 @@ class DynamicCoEvolutionEnv(gym.Env):
                 direction = -1.0 if self.agent_role == "red" else 1.0
                 new_state[dim] += direction * effect_size
 
-        # Natural dynamics - slight randomness
-        noise = np.random.normal(0, 0.02, size=self.state_dim)
+        # Natural dynamics - slight randomness (using env-specific RNG)
+        noise = self.np_random.normal(0, 0.02, size=self.state_dim)
         new_state += noise
 
         # Bounds - keep state in valid range
         new_state = np.clip(new_state, 0.0, 1.0)
-
-        # Reset seed to not affect other random calls
-        np.random.seed(None)
 
         return new_state.astype(np.float32)
 
