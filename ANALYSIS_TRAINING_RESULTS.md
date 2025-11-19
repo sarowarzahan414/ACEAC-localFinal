@@ -100,52 +100,62 @@ This is like **chess where draws count as wins for White**:
 
 ### Modified Timeout Condition
 
-**File:** `aceac_zerosum_environment.py:202-212` (fixed version)
+**File:** `aceac_zerosum_environment.py:212-217` (fixed version)
 
 ```python
-# Timeout - BALANCED FIX
+# Timeout - CORRECT FIX
 if self.step_count >= self.max_steps:
-    # Winner determined by final state position
-    if state_mean > 0.55:
-        return True, "red"  # Red gained ground
-    elif state_mean < 0.45:
-        return True, "blue"  # Blue gained ground
-    else:
-        return True, "draw"  # True stalemate
+    # If neither side achieved decisive victory (0.3 or 0.7), it's a draw
+    # State in range [0.3, 0.7] = contested/inconclusive = DRAW
+    return True, "draw"
 ```
 
 ### Why This Works
 
 **Removes Blue's Structural Advantage:**
 - Timeout no longer automatic Blue win
-- Winner determined by who made progress
-- True stalemate (0.45-0.55) = draw
+- Timeout only triggered if state in [0.3, 0.7] (neither achieved decisive victory)
+- All timeouts = draw (fair outcome for contested states)
+
+**Uses Consistent Thresholds:**
+- Win thresholds: <0.3 (Blue) or >0.7 (Red)
+- Same thresholds apply whether win happens at step 10 or step 100
+- No arbitrary secondary thresholds (0.45/0.55)
+- Simple, clear logic
 
 **Promotes Decisive Play:**
-- Both agents incentivized to push for advantage
-- Red must attack to move state >0.55
-- Blue must defend to keep state <0.45
-- Neither can coast on timeout
+- Both agents incentivized to reach 0.3 or 0.7 thresholds
+- Draw reward (0) is neutral - neither punished nor rewarded
+- Agents learn that contested states = no reward
+- Encourages pushing for decisive victories
 
 **Maintains Zero-Sum:**
 - Draw reward = 0 for both
 - Win/loss still ±100
-- Zero-sum property preserved
+- Zero-sum property preserved (0 + 0 = 0)
 
 ### Expected Balanced Results
 
 **With Random Play (baseline):**
-- Red wins: ~40-60%
-- Blue wins: ~40-60%
-- Draws: ~10-20%
-- **NOT 100/0 catastrophe**
+- Red wins: ~5-10% (decisive victories, state >0.7)
+- Blue wins: ~5-10% (decisive victories, state <0.3)
+- Draws: ~80-90% (most timeouts, state stays in 0.3-0.7)
+- **This is NORMAL and EXPECTED for untrained agents!**
+
+**Why High Draw Rate is Good:**
+- Proves neither side has structural advantage
+- Both agents learn from wins/losses (not from fake timeout wins)
+- Draw rate will DECREASE as agents learn decisive strategies
 
 **Early Training (Gen 1-5):**
+- Draws decrease to ~60-80% (agents learning to push harder)
+- Red/Blue wins each increase to ~10-20%
 - Win rates shift as strategies emerge
 - One side may gain temporary advantage
-- Loser adapts in next generation
 
 **Mature Training (Gen 10-20):**
+- Draws decrease to ~30-50% (decisive play emerges)
+- Red/Blue wins each ~25-35%
 - Win rates oscillate (arms race)
 - Evidence of co-evolution
 - Sophisticated strategies emerge
