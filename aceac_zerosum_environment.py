@@ -151,15 +151,20 @@ class ZeroSumCyberEnv(gym.Env):
         - Red actions push state UP (toward 1.0 = compromised)
         - Blue actions push state DOWN (toward 0.0 = secured)
         - Actions directly oppose each other
+
+        FIXED: Removed action-based seeding that caused saturation
+        - Same action can now affect different dimensions each time
+        - Prevents hitting ceiling and becoming ineffective
         """
         new_state = self.state.copy()
 
         # Agent action effect
-        np.random.seed(action)  # Deterministic per action
+        # Use action number to modulate effect strength, but not which dims
+        action_strength = 0.75 + (action / self.num_actions) * 0.5  # Range 0.75-1.25
         affected_dims = np.random.choice(self.state_dim, size=self.state_dim // 4, replace=False)
 
         for dim in affected_dims:
-            effect_size = np.random.uniform(0.05, 0.15)
+            effect_size = np.random.uniform(0.05, 0.15) * action_strength
 
             if self.agent_role == "red":
                 new_state[dim] += effect_size  # Red pushes UP
@@ -168,11 +173,11 @@ class ZeroSumCyberEnv(gym.Env):
 
         # Opponent counter-action
         if opponent_action is not None:
-            np.random.seed(opponent_action)
+            opp_strength = 0.75 + (opponent_action / self.num_actions) * 0.5
             opp_affected_dims = np.random.choice(self.state_dim, size=self.state_dim // 4, replace=False)
 
             for dim in opp_affected_dims:
-                effect_size = np.random.uniform(0.05, 0.15)
+                effect_size = np.random.uniform(0.05, 0.15) * opp_strength
 
                 if self.agent_role == "red":
                     new_state[dim] -= effect_size  # Blue opponent pushes DOWN
@@ -185,9 +190,6 @@ class ZeroSumCyberEnv(gym.Env):
 
         # Bounds
         new_state = np.clip(new_state, 0.0, 1.0)
-
-        # Reset seed
-        np.random.seed(None)
 
         return new_state.astype(np.float32)
 
