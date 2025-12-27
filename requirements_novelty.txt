@@ -1,0 +1,18 @@
+# Requirements for Option 2 & Option 3 Novelty Experiments
+# Install with: pip install -r requirements_novelty.txt
+
+# Core ML/RL (likely already installed)
+numpy>=1.21.0
+stable-baselines3>=2.0.0
+gymnasium>=0.28.0
+
+# Statistical Analysis (for Option 3 - dimension validation)
+scikit-learn>=1.0.0      # Mutual Information, PCA
+scipy>=1.7.0             # Statistical tests
+
+# Visualization (for both options)
+matplotlib>=3.5.0        # Plotting
+seaborn>=0.11.0          # Enhanced visualizations
+
+# Optional but recommended
+pandas>=1.3.0            # Data manipulation (if needed)
