@@ -135,7 +135,11 @@ class QDSWAPTrainer:
             for step in range(100):
                 action, _ = policy.predict(obs, deterministic=True)
                 obs, reward, terminated, truncated, info = env.step(action)
-                actions_taken.append(action)
+                # Convert action to int for hashability in set()
+                if isinstance(action, np.ndarray):
+                    actions_taken.append(int(action.item()))
+                else:
+                    actions_taken.append(int(action))
                 if terminated:
                     break
 
@@ -203,7 +207,11 @@ class QDSWAPTrainer:
                 action, _ = policy.predict(obs, deterministic=True)
                 obs, reward, terminated, truncated, info = env.step(action)
                 total_reward += reward
-                actions_taken.append(action)
+                # Convert action to int for hashability in set()
+                if isinstance(action, np.ndarray):
+                    actions_taken.append(int(action.item()))
+                else:
+                    actions_taken.append(int(action))
                 total_timesteps += 1
                 if terminated:
                     break
