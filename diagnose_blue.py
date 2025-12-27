@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """
 Diagnostic script to test Blue environment
 """
@@ -22,3 +23,20 @@ for i in range(10):
 print(f"\nTotal reward: {total_reward:.2f}")
 print(f"Successes: {successes}/10")
 print(f"Blue environment working: {'YES' if successes > 0 else 'NO - ALL DEFENSES FAILED'}")
+=======
+from aceac_v2_cyber_killchain import ACEACv2Environment
+
+env = ACEACv2Environment(agent_role="blue")
+obs, _ = env.reset()
+
+print("Testing Blue environment:")
+for i in range(10):
+    action = env.action_space.sample()
+    obs, reward, done, truncated, info = env.step(action)
+    print(f"Step {i+1}: action={action}, reward={reward:.2f}, done={done}")
+    if done:
+        break
+
+print(f"\nTotal reward: {reward:.2f}")
+print(f"Blue environment working: {'YES' if reward > -100 else 'NO - BROKEN!'}")
+>>>>>>> 88d0ae3 (Syncing local files with GitHub)

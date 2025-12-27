@@ -1,0 +1,356 @@
+{
+  "user": "sarowarzahan414",
+  "date": "2025-12-24",
+  "time_utc": "22:32:44",
+  "innovations": [
+    "#1 QD Pool",
+    "#2 Behavioral Characterization"
+  ],
+  "duration_seconds": 417.9196922779083,
+  "duration_minutes": 6.965328204631805,
+  "generations": 10,
+  "episodes_per_gen": 100,
+  "behavior_dims": 2,
+  "grid_resolution": 10,
+  "history": [
+    {
+      "generation": 1,
+      "duration": 26.46963381767273,
+      "red_performance": -409.66,
+      "blue_performance": -800.0,
+      "red_behavior": [
+        0.09714285714285716,
+        0.10369347858758937
+      ],
+      "blue_behavior": [
+        0.0,
+        -3.1066749296901404e-11
+      ],
+      "red_pool": {
+        "size": 1,
+        "avg": -409.66,
+        "best": -409.66,
+        "worst": -409.66,
+        "coverage": 0.01,
+        "policies_added": 1,
+        "policies_rejected": 0
+      },
+      "blue_pool": {
+        "size": 1,
+        "avg": -800.0,
+        "best": -800.0,
+        "worst": -800.0,
+        "coverage": 0.01,
+        "policies_added": 1,
+        "policies_rejected": 0
+      }
+    },
+    {
+      "generation": 2,
+      "duration": 25.804580450057983,
+      "red_performance": -693.2,
+      "blue_performance": -800.0,
+      "red_behavior": [
+        0.1314285714285714,
+        -3.1066749296901404e-11
+      ],
+      "blue_behavior": [
+        0.0,
+        0.17824421581716965
+      ],
+      "red_pool": {
+        "size": 2,
+        "avg": -551.4300000000001,
+        "best": -409.66,
+        "worst": -693.2,
+        "coverage": 0.02,
+        "policies_added": 2,
+        "policies_rejected": 0
+      },
+      "blue_pool": {
+        "size": 2,
+        "avg": -800.0,
+        "best": -800.0,
+        "worst": -800.0,
+        "coverage": 0.02,
+        "policies_added": 2,
+        "policies_rejected": 0
+      }
+    },
+    {
+      "generation": 3,
+      "duration": 51.0246148109436,
+      "red_performance": -636.9,
+      "blue_performance": -800.0,
+      "red_behavior": [
+        0.12,
+        -3.1066749296901404e-11
+      ],
+      "blue_behavior": [
+        0.0,
+        -3.1066749296901404e-11
+      ],
+      "red_pool": {
+        "size": 2,
+        "avg": -523.28,
+        "best": -409.66,
+        "worst": -636.9,
+        "coverage": 0.02,
+        "policies_added": 3,
+        "policies_rejected": 0
+      },
+      "blue_pool": {
+        "size": 2,
+        "avg": -800.0,
+        "best": -800.0,
+        "worst": -800.0,
+        "coverage": 0.02,
+        "policies_added": 2,
+        "policies_rejected": 1
+      }
+    },
+    {
+      "generation": 4,
+      "duration": 25.823094606399536,
+      "red_performance": -367.52000000000004,
+      "blue_performance": -800.0,
+      "red_behavior": [
+        0.09714285714285717,
+        -3.1066749296901404e-11
+      ],
+      "blue_behavior": [
+        0.0,
+        0.024902227071182607
+      ],
+      "red_pool": {
+        "size": 3,
+        "avg": -471.35999999999996,
+        "best": -367.52000000000004,
+        "worst": -636.9,
+        "coverage": 0.03,
+        "policies_added": 4,
+        "policies_rejected": 0
+      },
+      "blue_pool": {
+        "size": 2,
+        "avg": -800.0,
+        "best": -800.0,
+        "worst": -800.0,
+        "coverage": 0.02,
+        "policies_added": 2,
+        "policies_rejected": 2
+      }
+    },
+    {
+      "generation": 5,
+      "duration": 24.871178150177002,
+      "red_performance": -353.5200000000001,
+      "blue_performance": -800.0,
+      "red_behavior": [
+        0.09714285714285716,
+        -3.1066749296901404e-11
+      ],
+      "blue_behavior": [
+        0.0,
+        0.013918283817522628
+      ],
+      "red_pool": {
+        "size": 3,
+        "avg": -466.6933333333333,
+        "best": -353.5200000000001,
+        "worst": -636.9,
+        "coverage": 0.03,
+        "policies_added": 5,
+        "policies_rejected": 0
+      },
+      "blue_pool": {
+        "size": 2,
+        "avg": -800.0,
+        "best": -800.0,
+        "worst": -800.0,
+        "coverage": 0.02,
+        "policies_added": 2,
+        "policies_rejected": 3
+      }
+    },
+    {
+      "generation": 6,
+      "duration": 136.28969430923462,
+      "red_performance": -299.52,
+      "blue_performance": -800.0,
+      "red_behavior": [
+        0.10285714285714287,
+        -3.1066749296901404e-11
+      ],
+      "blue_behavior": [
+        0.0,
+        0.10009602969974048
+      ],
+      "red_pool": {
+        "size": 3,
+        "avg": -354.2333333333334,
+        "best": -299.52,
+        "worst": -409.66,
+        "coverage": 0.03,
+        "policies_added": 6,
+        "policies_rejected": 0
+      },
+      "blue_pool": {
+        "size": 2,
+        "avg": -800.0,
+        "best": -800.0,
+        "worst": -800.0,
+        "coverage": 0.02,
+        "policies_added": 2,
+        "policies_rejected": 4
+      }
+    },
+    {
+      "generation": 7,
+      "duration": 25.6755530834198,
+      "red_performance": -244.95999999999998,
+      "blue_performance": -800.0,
+      "red_behavior": [
+        0.10285714285714287,
+        -3.1066749296901404e-11
+      ],
+      "blue_behavior": [
+        0.0,
+        0.10464632718120356
+      ],
+      "red_pool": {
+        "size": 3,
+        "avg": -336.0466666666667,
+        "best": -244.95999999999998,
+        "worst": -409.66,
+        "coverage": 0.03,
+        "policies_added": 7,
+        "policies_rejected": 0
+      },
+      "blue_pool": {
+        "size": 2,
+        "avg": -800.0,
+        "best": -800.0,
+        "worst": -800.0,
+        "coverage": 0.02,
+        "policies_added": 2,
+        "policies_rejected": 5
+      }
+    },
+    {
+      "generation": 8,
+      "duration": 52.04115080833435,
+      "red_performance": -289.52000000000004,
+      "blue_performance": -800.0,
+      "red_behavior": [
+        0.10857142857142858,
+        -3.1066749296901404e-11
+      ],
+      "blue_behavior": [
+        0.0,
+        -3.1066749296901404e-11
+      ],
+      "red_pool": {
+        "size": 3,
+        "avg": -336.0466666666667,
+        "best": -244.95999999999998,
+        "worst": -409.66,
+        "coverage": 0.03,
+        "policies_added": 7,
+        "policies_rejected": 1
+      },
+      "blue_pool": {
+        "size": 2,
+        "avg": -800.0,
+        "best": -800.0,
+        "worst": -800.0,
+        "coverage": 0.02,
+        "policies_added": 2,
+        "policies_rejected": 6
+      }
+    },
+    {
+      "generation": 9,
+      "duration": 25.008105039596558,
+      "red_performance": -261.52,
+      "blue_performance": -800.0,
+      "red_behavior": [
+        0.10285714285714287,
+        -3.1066749296901404e-11
+      ],
+      "blue_behavior": [
+        0.0,
+        -3.1066749296901404e-11
+      ],
+      "red_pool": {
+        "size": 3,
+        "avg": -336.0466666666667,
+        "best": -244.95999999999998,
+        "worst": -409.66,
+        "coverage": 0.03,
+        "policies_added": 7,
+        "policies_rejected": 2
+      },
+      "blue_pool": {
+        "size": 2,
+        "avg": -800.0,
+        "best": -800.0,
+        "worst": -800.0,
+        "coverage": 0.02,
+        "policies_added": 2,
+        "policies_rejected": 7
+      }
+    },
+    {
+      "generation": 10,
+      "duration": 24.712993383407593,
+      "red_performance": -178.08,
+      "blue_performance": -800.0,
+      "red_behavior": [
+        0.10285714285714287,
+        -3.1066749296901404e-11
+      ],
+      "blue_behavior": [
+        0.0,
+        -3.1066749296901404e-11
+      ],
+      "red_pool": {
+        "size": 3,
+        "avg": -313.7533333333334,
+        "best": -178.08,
+        "worst": -409.66,
+        "coverage": 0.03,
+        "policies_added": 8,
+        "policies_rejected": 2
+      },
+      "blue_pool": {
+        "size": 2,
+        "avg": -800.0,
+        "best": -800.0,
+        "worst": -800.0,
+        "coverage": 0.02,
+        "policies_added": 2,
+        "policies_rejected": 8
+      }
+    }
+  ],
+  "red_pool_final": {
+    "size": 3,
+    "avg": -313.7533333333334,
+    "best": -178.08,
+    "worst": -409.66,
+    "coverage": 0.03,
+    "policies_added": 8,
+    "policies_rejected": 2
+  },
+  "blue_pool_final": {
+    "size": 2,
+    "avg": -800.0,
+    "best": -800.0,
+    "worst": -800.0,
+    "coverage": 0.02,
+    "policies_added": 2,
+    "policies_rejected": 8
+  },
+  "status": "complete"
+}

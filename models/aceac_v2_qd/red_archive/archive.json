@@ -1,0 +1,39 @@
+{
+  "metadata": {
+    "agent_type": "red",
+    "behavior_dims": 2,
+    "resolution": 10,
+    "max_archive_size": 100,
+    "policies_added": 8,
+    "policies_rejected": 2
+  },
+  "cells": {
+    "(0, 1)": {
+      "fitness": -409.66,
+      "behavior": [
+        0.09714285714285716,
+        0.10369347858758937
+      ],
+      "generation": 1,
+      "policy_path": "models/aceac_v2_qd/red_archive/cell_0_1.zip"
+    },
+    "(1, 0)": {
+      "fitness": -178.08,
+      "behavior": [
+        0.10285714285714287,
+        -3.1066749296901404e-11
+      ],
+      "generation": 10,
+      "policy_path": "models/aceac_v2_qd/red_archive/cell_1_0.zip"
+    },
+    "(0, 0)": {
+      "fitness": -353.5200000000001,
+      "behavior": [
+        0.09714285714285716,
+        -3.1066749296901404e-11
+      ],
+      "generation": 5,
+      "policy_path": "models/aceac_v2_qd/red_archive/cell_0_0.zip"
+    }
+  }
+}

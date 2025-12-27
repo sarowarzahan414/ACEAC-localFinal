@@ -1,0 +1,30 @@
+{
+  "metadata": {
+    "agent_type": "blue",
+    "behavior_dims": 2,
+    "resolution": 10,
+    "max_archive_size": 100,
+    "policies_added": 2,
+    "policies_rejected": 8
+  },
+  "cells": {
+    "(0, 0)": {
+      "fitness": -800.0,
+      "behavior": [
+        0.0,
+        -3.1066749296901404e-11
+      ],
+      "generation": 1,
+      "policy_path": "models/aceac_v2_qd/blue_archive/cell_0_0.zip"
+    },
+    "(0, 1)": {
+      "fitness": -800.0,
+      "behavior": [
+        0.0,
+        0.17824421581716965
+      ],
+      "generation": 2,
+      "policy_path": "models/aceac_v2_qd/blue_archive/cell_0_1.zip"
+    }
+  }
+}

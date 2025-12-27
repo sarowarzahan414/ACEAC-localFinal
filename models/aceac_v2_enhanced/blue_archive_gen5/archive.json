@@ -1,0 +1,23 @@
+{
+  "metadata": {
+    "agent_type": "blue",
+    "behavior_dims": 3,
+    "resolution": 20,
+    "max_archive_size": 200,
+    "policies_added": 1,
+    "policies_rejected": 4,
+    "total_evaluations": 5
+  },
+  "cells": {
+    "(0, 0, 19)": {
+      "fitness": 30.0,
+      "behavior": [
+        0.04285708163274048,
+        0.0,
+        0.999995000025
+      ],
+      "generation": 1,
+      "policy_path": "models/aceac_v2_enhanced/blue_archive_gen5/cell_0_0_19.zip"
+    }
+  }
+}

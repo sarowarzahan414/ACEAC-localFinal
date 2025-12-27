@@ -14,6 +14,10 @@ INNOVATIONS:
 
 Author: @sarowarzahan414
 Date: 2025-12-08 (Enhanced)
+<<<<<<< HEAD
+=======
+FIXED: 2025-12-25 (Blue behavioral descriptor bug)
+>>>>>>> 88d0ae3 (Syncing local files with GitHub)
 """
 
 import numpy as np
@@ -177,17 +181,30 @@ class EnhancedQualityDiversityPool:
             raise ValueError(f"Unknown sampling strategy: {strategy}")
     
     # ========================================================================
+<<<<<<< HEAD
     # INNOVATION #2: Enhanced Behavioral Characterization (3D)
+=======
+    # INNOVATION #2: Enhanced Behavioral Characterization (3D) - FIXED
+>>>>>>> 88d0ae3 (Syncing local files with GitHub)
     # ========================================================================
     
     def get_behavior_descriptor(self, policy, env, num_episodes=5):
         """
+<<<<<<< HEAD
         INNOVATION #2 ENHANCED: 3D Behavioral Characterization
         
         Behavioral dimensions:
         - Dimension 1: Kill chain progression rate
         - Dimension 2: Tool diversity (entropy)
         - Dimension 3: Attack effectiveness (NEW!)
+=======
+        INNOVATION #2 ENHANCED: 3D Behavioral Characterization (AGENT-AWARE)
+        
+        Behavioral dimensions:
+        - Dimension 1: Kill chain progression (Red) / Detection improvement (Blue)
+        - Dimension 2: Tool diversity (entropy) - both agents
+        - Dimension 3: Effectiveness - damage for Red, healing for Blue
+>>>>>>> 88d0ae3 (Syncing local files with GitHub)
         
         Args:
             policy: RL policy to evaluate
@@ -195,6 +212,7 @@ class EnhancedQualityDiversityPool:
             num_episodes: Number of episodes to average
         
         Returns:
+<<<<<<< HEAD
             tuple: (kill_chain_rate, tool_diversity, effectiveness) in [0,1]
         """
         self.total_evaluations += 1
@@ -203,12 +221,28 @@ class EnhancedQualityDiversityPool:
         tool_entropies = []
         effectiveness_scores = []
         
+=======
+            tuple: (dim1, tool_diversity, effectiveness) in [0,1]
+        """
+        self.total_evaluations += 1
+        
+        dim1_values = []
+        tool_entropies = []
+        effectiveness_scores = []
+        
+        is_blue = (self.agent_type == "blue")
+        
+>>>>>>> 88d0ae3 (Syncing local files with GitHub)
         for ep in range(num_episodes):
             obs, _ = env.reset()
             tool_usage = defaultdict(int)
             steps = 0
             total_reward = 0
             initial_security = getattr(env, 'network_security', 0.8)
+<<<<<<< HEAD
+=======
+            initial_detection = getattr(env, 'detection_level', 0.3)
+>>>>>>> 88d0ae3 (Syncing local files with GitHub)
             
             for step in range(100):
                 action, _ = policy.predict(obs, deterministic=True)
@@ -224,6 +258,7 @@ class EnhancedQualityDiversityPool:
                 if done:
                     break
             
+<<<<<<< HEAD
             # Dimension 1: Kill chain progression
             kill_chain_progress = info.get('kill_chain_progress', 0.0)
             kill_chain_rates.append(kill_chain_progress)
@@ -244,13 +279,57 @@ class EnhancedQualityDiversityPool:
             final_security = info.get('network_security', initial_security)
             security_reduction = initial_security - final_security
             effectiveness = np.clip(security_reduction / initial_security, 0.0, 1.0)
+=======
+            # Dimension 1: Agent-specific progression
+            if is_blue:
+                # Blue: Detection improvement
+                final_detection = info.get('detection_level', initial_detection)
+                detection_gain = final_detection - initial_detection
+                dim1 = np.clip(detection_gain / (1.0 - initial_detection + 1e-6), 0.0, 1.0)
+            else:
+                # Red: Kill chain progression
+                kill_chain_progress = info.get('kill_chain_progress', 0.0)
+                dim1 = kill_chain_progress
+            
+            dim1_values.append(dim1)
+            
+            # Dimension 2: Tool diversity (Shannon entropy) - FIXED
+            counts = np.array(list(tool_usage.values()), dtype=float)
+            if len(counts) > 1 and counts.sum() > 0:
+                probs = counts / counts.sum()
+                entropy = -np.sum(probs * np.log(probs + 1e-10))
+                max_entropy = np.log(len(counts))  # Max entropy for tools used
+                normalized_entropy = entropy / max_entropy if max_entropy > 0 else 0.0
+            else:
+                normalized_entropy = 0.0
+            tool_entropies.append(max(0.0, normalized_entropy))  # Prevent -0.000
+            
+            # Dimension 3: Agent-specific effectiveness - FIXED FOR BLUE
+            final_security = info.get('network_security', initial_security)
+            
+            if is_blue:
+                # Blue: Healing effectiveness (security INCREASE)
+                security_gain = final_security - initial_security
+                effectiveness = np.clip(security_gain / (1.0 - initial_security + 1e-6), 0.0, 1.0)
+            else:
+                # Red: Attack effectiveness (security REDUCTION)
+                security_reduction = initial_security - final_security
+                effectiveness = np.clip(security_reduction / (initial_security + 1e-6), 0.0, 1.0)
+            
+>>>>>>> 88d0ae3 (Syncing local files with GitHub)
             effectiveness_scores.append(effectiveness)
         
         # Average over episodes
         behavior = (
+<<<<<<< HEAD
             float(np.mean(kill_chain_rates)),     # [0, 1]
             float(np.mean(tool_entropies)),       # [0, 1]
             float(np.mean(effectiveness_scores))  # [0, 1] NEW!
+=======
+            float(np.mean(dim1_values)),           # Agent-specific
+            float(np.mean(tool_entropies)),        # Tool diversity
+            float(np.mean(effectiveness_scores))   # Effectiveness
+>>>>>>> 88d0ae3 (Syncing local files with GitHub)
         )
         
         return behavior
