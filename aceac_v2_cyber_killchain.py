@@ -138,7 +138,14 @@ class ACEACv2Environment(gym.Env):
         self.tool_usage = {i: 0 for i in range(25)}
         self.successful_actions = 0
         self.failed_actions = 0
-        
+
+        # Blue agent tracking for behavioral characterization
+        self.attacks_detected = 0
+        self.total_attacks = 0
+        self.false_positives = 0
+        self.defensive_actions = 0
+        self.recent_actions = []
+
         self.reset()
     
     def reset(self, seed=None, options=None):
@@ -156,7 +163,14 @@ class ACEACv2Environment(gym.Env):
         self.tool_usage = {i: 0 for i in range(25)}
         self.successful_actions = 0
         self.failed_actions = 0
-        
+
+        # Reset Blue tracking metrics
+        self.attacks_detected = 0
+        self.total_attacks = 0
+        self.false_positives = 0
+        self.defensive_actions = 0
+        self.recent_actions = []
+
         return self._get_observation(), {}
     
     def step(self, action):
@@ -291,47 +305,90 @@ class ACEACv2Environment(gym.Env):
         return reward, success
     
     def _execute_defensive_action(self, tool_id: int) -> Tuple[float, bool]:
-        """Execute defensive tool action"""
-        
-        # Tool effectiveness by category (10× stronger for balanced gameplay)
+        """DENSE REWARD DEFENSIVE ACTION with detection, FP, response time, diversity"""
+
+        # Track defensive action
+        self.defensive_actions += 1
+        self.recent_actions.append(tool_id)
+        if len(self.recent_actions) > 25:
+            self.recent_actions.pop(0)
+
+        # Tool effectiveness by category (BALANCED at 0.20-0.30, 2.5× original)
         tool_effectiveness = {
             # Network monitoring (0-4)
-            **{i: 0.80 for i in range(5)},
+            **{i: 0.20 for i in range(5)},
             # Firewall (5-9)
-            **{i: 1.20 for i in range(5, 10)},
+            **{i: 0.30 for i in range(5, 10)},
             # SIEM (10-14)
-            **{i: 1.00 for i in range(10, 15)},
+            **{i: 0.25 for i in range(10, 15)},
             # Endpoint (15-19)
-            **{i: 0.90 for i in range(15, 20)},
+            **{i: 0.22 for i in range(15, 20)},
             # Incident Response (20-24)
-            **{i: 1.10 for i in range(20, 25)},
+            **{i: 0.28 for i in range(20, 25)},
         }
-        
-        defense_power = tool_effectiveness.get(tool_id, 0.08)
-        
-        # Simulate incoming attack
+
+        defense_power = tool_effectiveness.get(tool_id, 0.20)
+
+        # Simulate incoming attack (70% chance attack is occurring)
+        attack_occurring = np.random.random() < 0.7
         attack_intensity = np.random.uniform(0.3, 0.8)
-        
-        # Calculate defense success
+
+        # Calculate defense effectiveness
         defense_effectiveness = defense_power * np.random.uniform(0.9, 1.3)
-        success = defense_effectiveness > (attack_intensity * 0.6)
-        
-        if success:
-            # Successful defense
-            healing = defense_effectiveness
-            self.network_security = min(1.0, self.network_security + healing)
-            self.detection_level = min(1.0, self.detection_level + 0.03)
-            
-            reward = 15.0 + defense_power * 25.0
+        response_time = np.random.uniform(0.0, 10.0)  # Response delay in arbitrary units
+
+        # Detection logic
+        detection_threshold = attack_intensity * 0.6
+        detected = defense_effectiveness > detection_threshold
+        raised_alarm = detected  # Simplified: assume alarm is raised when detection occurs
+
+        # Initialize reward components
+        detection_reward = 0.0
+        time_bonus = 0.0
+
+        if attack_occurring:
+            self.total_attacks += 1
+
+            if detected:
+                # Successfully caught the attack!
+                self.attacks_detected += 1
+                detection_reward = +10.0
+                time_bonus = 5.0 * (1.0 - response_time / 10.0)  # Faster response = higher bonus
+
+                # Heal network security
+                healing = defense_effectiveness * 0.05
+                self.network_security = min(1.0, self.network_security + healing)
+                self.detection_level = min(1.0, self.detection_level + 0.03)
+
+                success = True
+            else:
+                # Missed the attack (false negative)
+                detection_reward = -10.0
+                success = False
         else:
-            # Failed defense
-            reward = -8.0
-        
+            # No attack occurring
+            if raised_alarm:
+                # False positive: raised alarm when there was no attack
+                self.false_positives += 1
+                detection_reward = -5.0
+                success = False
+            else:
+                # True negative: correctly didn't raise alarm
+                detection_reward = +2.0
+                success = True
+
+        # Diversity bonus: reward using variety of tools
+        unique_tools = len(set(self.recent_actions))
+        diversity_bonus = 5.0 * (unique_tools / 25.0)
+
+        # Total reward
+        reward = detection_reward + time_bonus + diversity_bonus
+
         # Cost penalties for expensive tools
         expensive_tools = [12, 14, 8, 9]  # Splunk, Graylog, pfSense, Fortinet
         if tool_id in expensive_tools:
             reward -= 2.0
-        
+
         return reward, success
     
     def _get_observation(self):
