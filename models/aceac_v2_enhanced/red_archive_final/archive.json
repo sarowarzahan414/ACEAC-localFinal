@@ -4,49 +4,39 @@
     "behavior_dims": 3,
     "resolution": 20,
     "max_archive_size": 200,
-    "policies_added": 9,
-    "policies_rejected": 11,
+    "policies_added": 8,
+    "policies_rejected": 12,
     "total_evaluations": 20
   },
   "cells": {
     "(1, 0, 18)": {
-      "fitness": -54.960000000000015,
+      "fitness": -55.519999999999996,
       "behavior": [
-        0.08571428571428573,
+        0.09142857142857144,
         0.0,
-        0.9004609234179701
+        0.9489043794785521
       ],
-      "generation": 8,
+      "generation": 14,
       "policy_path": "models/aceac_v2_enhanced/red_archive_final/cell_1_0_18.zip"
     },
     "(1, 0, 19)": {
-      "fitness": -85.52000000000001,
+      "fitness": -76.08000000000001,
       "behavior": [
         0.09714285714285716,
         0.0,
-        0.9668859834315613
+        0.9602900509953264
       ],
-      "generation": 3,
+      "generation": 16,
       "policy_path": "models/aceac_v2_enhanced/red_archive_final/cell_1_0_19.zip"
     },
-    "(1, 0, 17)": {
-      "fitness": -267.52,
-      "behavior": [
-        0.08571428571428573,
-        0.0,
-        0.8952674675657141
-      ],
-      "generation": 13,
-      "policy_path": "models/aceac_v2_enhanced/red_archive_final/cell_1_0_17.zip"
-    },
     "(2, 0, 19)": {
-      "fitness": -150.08,
+      "fitness": -123.52000000000002,
       "behavior": [
         0.10285714285714287,
         0.0,
-        0.9793021006316242
+        0.9848001367062024
       ],
-      "generation": 20,
+      "generation": 7,
       "policy_path": "models/aceac_v2_enhanced/red_archive_final/cell_2_0_19.zip"
     }
   }

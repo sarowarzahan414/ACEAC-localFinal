@@ -14,8 +14,7 @@ INNOVATIONS:
 
 Author: @sarowarzahan414
 Date: 2025-12-08 (Enhanced)
-<<<<<<< HEAD
-=======
+
 FIXED: 2025-12-25 (Blue behavioral descriptor bug)
 >>>>>>> 88d0ae3 (Syncing local files with GitHub)
 """
@@ -181,23 +180,14 @@ class EnhancedQualityDiversityPool:
             raise ValueError(f"Unknown sampling strategy: {strategy}")
     
     # ========================================================================
-<<<<<<< HEAD
-    # INNOVATION #2: Enhanced Behavioral Characterization (3D)
-=======
+
     # INNOVATION #2: Enhanced Behavioral Characterization (3D) - FIXED
 >>>>>>> 88d0ae3 (Syncing local files with GitHub)
     # ========================================================================
     
     def get_behavior_descriptor(self, policy, env, num_episodes=5):
         """
-<<<<<<< HEAD
-        INNOVATION #2 ENHANCED: 3D Behavioral Characterization
-        
-        Behavioral dimensions:
-        - Dimension 1: Kill chain progression rate
-        - Dimension 2: Tool diversity (entropy)
-        - Dimension 3: Attack effectiveness (NEW!)
-=======
+
         INNOVATION #2 ENHANCED: 3D Behavioral Characterization (AGENT-AWARE)
         
         Behavioral dimensions:
@@ -212,16 +202,8 @@ class EnhancedQualityDiversityPool:
             num_episodes: Number of episodes to average
         
         Returns:
-<<<<<<< HEAD
-            tuple: (kill_chain_rate, tool_diversity, effectiveness) in [0,1]
-        """
-        self.total_evaluations += 1
-        
-        kill_chain_rates = []
-        tool_entropies = []
-        effectiveness_scores = []
-        
-=======
+ 
+
             tuple: (dim1, tool_diversity, effectiveness) in [0,1]
         """
         self.total_evaluations += 1
@@ -239,8 +221,7 @@ class EnhancedQualityDiversityPool:
             steps = 0
             total_reward = 0
             initial_security = getattr(env, 'network_security', 0.8)
-<<<<<<< HEAD
-=======
+
             initial_detection = getattr(env, 'detection_level', 0.3)
 >>>>>>> 88d0ae3 (Syncing local files with GitHub)
             
@@ -258,28 +239,6 @@ class EnhancedQualityDiversityPool:
                 if done:
                     break
             
-<<<<<<< HEAD
-            # Dimension 1: Kill chain progression
-            kill_chain_progress = info.get('kill_chain_progress', 0.0)
-            kill_chain_rates.append(kill_chain_progress)
-            
-            # Dimension 2: Tool diversity (Shannon entropy)
-            counts = np.array(list(tool_usage.values()), dtype=float)
-            if len(counts) > 0 and counts.sum() > 0:
-                probs = counts / counts.sum()
-                entropy = -np.sum(probs * np.log(probs + 1e-10))
-                max_entropy = np.log(env.action_space.n)
-                normalized_entropy = entropy / max_entropy if max_entropy > 0 else 0
-            else:
-                normalized_entropy = 0.0
-            tool_entropies.append(normalized_entropy)
-            
-            # Dimension 3: Attack Effectiveness (NEW!)
-            # Measures how much damage agent caused
-            final_security = info.get('network_security', initial_security)
-            security_reduction = initial_security - final_security
-            effectiveness = np.clip(security_reduction / initial_security, 0.0, 1.0)
-=======
             # Dimension 1: Agent-specific progression
             if is_blue:
                 # Blue: Detection improvement
@@ -321,11 +280,7 @@ class EnhancedQualityDiversityPool:
         
         # Average over episodes
         behavior = (
-<<<<<<< HEAD
-            float(np.mean(kill_chain_rates)),     # [0, 1]
-            float(np.mean(tool_entropies)),       # [0, 1]
-            float(np.mean(effectiveness_scores))  # [0, 1] NEW!
-=======
+
             float(np.mean(dim1_values)),           # Agent-specific
             float(np.mean(tool_entropies)),        # Tool diversity
             float(np.mean(effectiveness_scores))   # Effectiveness
@@ -643,9 +598,11 @@ def train_aceac_v2_enhanced(config=None):
     print("")
     print("Initializing agents...")
     red_policy = PPO("MlpPolicy", env_red, verbose=0, 
-                    learning_rate=3e-4, n_steps=2048, batch_size=64)
+                    learning_rate=3e-4, n_steps=2048, batch_size=64,
+                ent_coef=0.1)
     blue_policy = PPO("MlpPolicy", env_blue, verbose=0,
-                     learning_rate=3e-4, n_steps=2048, batch_size=64)
+                     learning_rate=3e-4, n_steps=2048, batch_size=64,
+                ent_coef=0.1)
     
     print("Red: 62D obs, 25 offensive tools")
     print("Blue: 62D obs, 25 defensive tools")

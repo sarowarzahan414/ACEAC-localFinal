@@ -293,20 +293,7 @@ class ACEACv2Environment(gym.Env):
     def _execute_defensive_action(self, tool_id: int) -> Tuple[float, bool]:
         """Execute defensive tool action"""
         
-<<<<<<< HEAD
-        # Tool effectiveness by category (10× stronger for balanced gameplay)
-        tool_effectiveness = {
-            # Network monitoring (0-4)
-            **{i: 0.80 for i in range(5)},
-            # Firewall (5-9)
-            **{i: 1.20 for i in range(5, 10)},
-            # SIEM (10-14)
-            **{i: 1.00 for i in range(10, 15)},
-            # Endpoint (15-19)
-            **{i: 0.90 for i in range(15, 20)},
-            # Incident Response (20-24)
-            **{i: 1.10 for i in range(20, 25)},
-=======
+
                # Tool effectiveness by category (10× stronger for balanced gameplay)
         tool_effectiveness = {
             # Network monitoring (0-4)

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 """
 Diagnostic script to test Blue environment
 """
