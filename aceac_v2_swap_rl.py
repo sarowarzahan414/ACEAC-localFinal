@@ -14,9 +14,7 @@ INNOVATIONS:
 
 Author: @sarowarzahan414
 Date: 2025-12-08 (Enhanced)
-
-FIXED: 2025-12-25 (Blue behavioral descriptor bug)
->>>>>>> 88d0ae3 (Syncing local files with GitHub)
+FIXED: 2025-12-27 (Merge conflicts resolved, exploration added)
 """
 
 import numpy as np
@@ -180,21 +178,17 @@ class EnhancedQualityDiversityPool:
             raise ValueError(f"Unknown sampling strategy: {strategy}")
     
     # ========================================================================
-
     # INNOVATION #2: Enhanced Behavioral Characterization (3D) - FIXED
->>>>>>> 88d0ae3 (Syncing local files with GitHub)
     # ========================================================================
     
     def get_behavior_descriptor(self, policy, env, num_episodes=5):
         """
-
         INNOVATION #2 ENHANCED: 3D Behavioral Characterization (AGENT-AWARE)
         
         Behavioral dimensions:
         - Dimension 1: Kill chain progression (Red) / Detection improvement (Blue)
         - Dimension 2: Tool diversity (entropy) - both agents
         - Dimension 3: Effectiveness - damage for Red, healing for Blue
->>>>>>> 88d0ae3 (Syncing local files with GitHub)
         
         Args:
             policy: RL policy to evaluate
@@ -202,8 +196,6 @@ class EnhancedQualityDiversityPool:
             num_episodes: Number of episodes to average
         
         Returns:
- 
-
             tuple: (dim1, tool_diversity, effectiveness) in [0,1]
         """
         self.total_evaluations += 1
@@ -214,16 +206,13 @@ class EnhancedQualityDiversityPool:
         
         is_blue = (self.agent_type == "blue")
         
->>>>>>> 88d0ae3 (Syncing local files with GitHub)
         for ep in range(num_episodes):
             obs, _ = env.reset()
             tool_usage = defaultdict(int)
             steps = 0
             total_reward = 0
             initial_security = getattr(env, 'network_security', 0.8)
-
             initial_detection = getattr(env, 'detection_level', 0.3)
->>>>>>> 88d0ae3 (Syncing local files with GitHub)
             
             for step in range(100):
                 action, _ = policy.predict(obs, deterministic=True)
@@ -275,16 +264,13 @@ class EnhancedQualityDiversityPool:
                 security_reduction = initial_security - final_security
                 effectiveness = np.clip(security_reduction / (initial_security + 1e-6), 0.0, 1.0)
             
->>>>>>> 88d0ae3 (Syncing local files with GitHub)
             effectiveness_scores.append(effectiveness)
         
         # Average over episodes
         behavior = (
-
             float(np.mean(dim1_values)),           # Agent-specific
             float(np.mean(tool_entropies)),        # Tool diversity
             float(np.mean(effectiveness_scores))   # Effectiveness
->>>>>>> 88d0ae3 (Syncing local files with GitHub)
         )
         
         return behavior
@@ -397,8 +383,6 @@ class EnhancedQualityDiversityPool:
             json.dump(archive_data, f, indent=2)
         
         print(f"[QD Pool] Saved archive: {len(self.archive)} policies to {path}")
-
-
 # ============================================================================
 # SWAP RL Trainer (Enhanced)
 # ============================================================================
@@ -599,10 +583,10 @@ def train_aceac_v2_enhanced(config=None):
     print("Initializing agents...")
     red_policy = PPO("MlpPolicy", env_red, verbose=0, 
                     learning_rate=3e-4, n_steps=2048, batch_size=64,
-                ent_coef=0.1)
+                    ent_coef=0.1)  # Exploration bonus (FIXED)
     blue_policy = PPO("MlpPolicy", env_blue, verbose=0,
                      learning_rate=3e-4, n_steps=2048, batch_size=64,
-                ent_coef=0.1)
+                     ent_coef=0.1)  # Exploration bonus (FIXED)
     
     print("Red: 62D obs, 25 offensive tools")
     print("Blue: 62D obs, 25 defensive tools")
